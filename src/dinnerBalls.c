@@ -1662,7 +1662,7 @@ static void ballReset(int ballNo) {
 
 		// music player settings
 		static int mx = -1, mxVol = 100, mxLoop = 1, mxVolDefLevel = 100, mxFade = 0, curSong = 0;
-		static double mxLoopTim = 0, mxTitleSampLength = 97.0, mxGameLength = 106.0, timend = 0.0;
+		static double mxLoopTim = 0, timend = 0.0l,  mxTitleSampLength = 97.0, mxGameLength = 106.0;
 		bool titleScreen = true;
 
 	// game settings
@@ -1773,6 +1773,7 @@ static void ballReset(int ballNo) {
 if (titleScreen == true) {
 
 voxie_playsound_update(mx, 0, 0, 0, 1.0);
+curSong = 0;
 mx = voxie_playsound("mx/mxtitle.wav", 0, mxVol, mxVol,1.0); 
 mxLoopTim = mxTitleSampLength + tim; // start music
 
@@ -2219,6 +2220,7 @@ if ( vx[i].but&~ovxbut[i]&(1<<12) ||vx[i].but&~ovxbut[i]&(1<<13) || vx[i].but&~o
 	loadMapNo = 0;
 	mxLoopTim = 0;
 	voxie_playsound_update(mx, 0, 0, 0, 1.0);
+	curSong = 1;
 	mx = voxie_playsound("mx/mx2.wav", 0, mxVol, mxVol,1.0); 
 	mxLoopTim = mxGameLength + tim; // start music
 
@@ -2241,6 +2243,7 @@ fxPlay(6,i);
 loadMapNo = 0;
 inited = 0;
 titleScreen = true;
+curSong = 0;
 voxie_playsound_update(mx, 0, 0, 0, 1.0);
 mx = voxie_playsound("mx/mxtitle.wav", 0, mxVol, mxVol,1.0); 
 mxLoopTim = mxTitleSampLength + tim; // start music
@@ -2492,7 +2495,7 @@ if (players[i].mouthStateResetTim < tim) {
 
 
 
-if (balls[i].type == 1) balls[i].col = rainbowPal[colourScroll];
+if (balls[i].type == 1  && balls[i].destroy == false) balls[i].col = rainbowPal[colourScroll];
 
 
 if (balls[i].speed < BALL_MIN_SPEED) balls[i].speed = BALL_MIN_SPEED;
@@ -4995,15 +4998,17 @@ case 5:
 			if (mxLoop == 1 && mxLoopTim < tim) {
 
 				if (curSong == 0) {
-					curSong = 1; // play song2
+					curSong = 0; // play song2
 					mxFade = 2;
+					
 					mx = voxie_playsound("mx/mxtitle.wav", 0, mxVol, mxVol,1.0); 
 					mxLoopTim = mxTitleSampLength + tim; // start music
 					
 
 				} else {
-					curSong = 0; // play song2
+					curSong = 1; // play song2
 					mxFade = 2;
+				
 					mx = voxie_playsound("mx/mx2.wav", 0, mxVol, mxVol,1.0); 
 					mxLoopTim = mxGameLength + tim; // start music
 			
